@@ -1,9 +1,53 @@
 <?php
-require_once "../includes/auth.php"; require_login();
-$conn->query("UPDATE notifications SET is_read=1 WHERE user_id=".(int)$_SESSION['user']['id']);
-$notes=$conn->query("SELECT * FROM notifications WHERE user_id=".(int)$_SESSION['user']['id']." ORDER BY id DESC LIMIT 100");
-include "../includes/header.php";
+
+require_once "../includes/auth.php";
+
+wajibAdmin();
+
+$totalUser = $conn
+    ->query("SELECT COUNT(*) AS total FROM users")
+    ->fetch_assoc()['total'];
+
 ?>
-<div class="hero"><h1>Notifikasi Saya</h1><p>Notifikasi pendaftaran dan aktivitas akun.</p></div>
-<div class="table-card"><?php if($notes->num_rows===0): ?><div class="empty">Belum ada notifikasi.</div><?php else: while($n=$notes->fetch_assoc()): ?><div class="notice"><b><?=e($n['title'])?></b><br><?=e($n['message'])?><div class="muted"><?=e($n['created_at'])?></div></div><?php endwhile; endif; ?></div>
-<?php include "../includes/footer.php"; ?>
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Notifications</title>
+
+    <link rel="stylesheet" href="../assets/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>🔔 Notifications</h1>
+
+        <br>
+
+        <div class="alert">
+
+            Sistem memiliki
+            <strong><?= $totalUser ?></strong>
+            data user.
+
+        </div>
+
+        <a href="dashboard.php" class="btn">
+            ← Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
